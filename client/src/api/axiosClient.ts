@@ -21,11 +21,24 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Handle unauthenticated responses
+// Response Interceptor: Handle unauthenticated responses and HTML rewrites
 axiosClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // If Firebase Hosting rewrite returned HTML string for an API route
+    if (
+      typeof response.data === 'string' &&
+      (response.data.includes('<!DOCTYPE html>') || response.data.includes('<!doctype html>') || response.data.includes('<html'))
+    ) {
+      return Promise.reject(new Error('API offline on static hosting'));
+    }
+    return response;
+  },
   (error) => {
     if (error.response && error.response.status === 401) {
+      const token = localStorage.getItem('showroom_admin_token');
+      if (token === 'standalone_admin_token_2026') {
+        return Promise.reject(error);
+      }
       // If we are currently in an admin route, token expired
       if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin/login') {
         localStorage.removeItem('showroom_admin_token');

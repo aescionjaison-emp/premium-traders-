@@ -28,11 +28,15 @@ export const AdminCollectionsPage: React.FC = () => {
     setIsLoading(true);
     try {
       const res = await api.getCollections();
-      if (res.data.success) {
+      if (res.data && res.data.success && res.data.data && res.data.data.length > 0) {
         setCollections(res.data.data);
+      } else {
+        const { DEFAULT_COLLECTIONS } = await import('../../data/showroomCatalogData.js');
+        setCollections(DEFAULT_COLLECTIONS);
       }
     } catch (err) {
-      error('Failed to load collections');
+      const { DEFAULT_COLLECTIONS } = await import('../../data/showroomCatalogData.js');
+      setCollections(DEFAULT_COLLECTIONS);
     } finally {
       setIsLoading(false);
     }

@@ -575,3 +575,27 @@ export const MASTER_SHOWROOM_PRODUCTS: IProduct[] = [
     displayOrder: 65,
   },
 ];
+
+export const DEFAULT_CATEGORIES = [
+  { _id: 'cat-tiles', name: 'Tiles & Large Format Porcelain', slug: 'tiles', description: 'Large-format porcelain slabs and vitrified tiles', image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 1 },
+  { _id: 'cat-granite', name: 'Granite, Marble & Natural Stone', slug: 'granite-marble-natural-stone', description: 'Exotic Indian and imported granites', image: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 2 },
+  { _id: 'cat-wood', name: 'Wood Works, Doors & Plywood', slug: 'wood-works-wooden-doors-plywood', description: 'Solid Burmese Teak entrances and wood works', image: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 3 },
+  { _id: 'cat-elec', name: 'Electrical Products, Lighting & Switches', slug: 'electrical-products-lighting-switches', description: 'Designer modular switches and architectural lighting', image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 4 },
+];
+
+export const DEFAULT_COLLECTIONS = [
+  { _id: 'col-01', name: 'CALACATTA & STATUARIO GRANDE', slug: 'calacatta-statuario-grande', categorySlug: 'tiles', description: 'Monumental continuous porcelain slab collection', image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 1 },
+  { _id: 'col-02', name: 'EXOTIC INDIAN GRANITE MASTERY', slug: 'exotic-indian-granite-mastery', categorySlug: 'granite-marble-natural-stone', description: 'Quarried deep crystal granite gang-saw slabs', image: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 2 },
+  { _id: 'col-03', name: 'ROYAL HERITAGE TEAK ENTRANCES', slug: 'royal-heritage-teak-entrances', categorySlug: 'wood-works-wooden-doors-plywood', description: 'Seasoned Burmese teak pivot doors and hardwood systems', image: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 3 },
+  { _id: 'col-04', name: 'BRUSHED BRASS & NOCTURNE SWITCHES', slug: 'brushed-brass-nocturne-switches', categorySlug: 'electrical-products-lighting-switches', description: 'Minimalist designer modular switch plates and architectural controls', image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85', featured: true, visible: true, displayOrder: 4 },
+];
+
+export const DEFAULT_BRANDS = [
+  { _id: 'brand-01', name: 'Varmora Granito', slug: 'varmora-granito', categorySlug: 'tiles', featured: true, visible: true, displayOrder: 1 },
+  { _id: 'brand-02', name: 'Kajaria Ceramics', slug: 'kajaria-ceramics', categorySlug: 'tiles', featured: true, visible: true, displayOrder: 2 },
+  { _id: 'brand-03', name: 'Somany Ceramics', slug: 'somany-ceramics', categorySlug: 'tiles', featured: true, visible: true, displayOrder: 3 },
+  { _id: 'brand-04', name: 'Schneider Electric', slug: 'schneider-electric', categorySlug: 'electrical-products-lighting-switches', featured: true, visible: true, displayOrder: 4 },
+  { _id: 'brand-05', name: 'Greenlam Veneers', slug: 'greenlam-veneers', categorySlug: 'wood-works-wooden-doors-plywood', featured: true, visible: true, displayOrder: 5 },
+  { _id: 'brand-06', name: 'Century Ply', slug: 'century-ply', categorySlug: 'wood-works-wooden-doors-plywood', featured: true, visible: true, displayOrder: 6 },
+  { _id: 'brand-07', name: 'Havells Studio', slug: 'havells-studio', categorySlug: 'electrical-products-lighting-switches', featured: true, visible: true, displayOrder: 7 },
+];

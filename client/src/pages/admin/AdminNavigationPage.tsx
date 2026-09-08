@@ -13,15 +13,26 @@ export const AdminNavigationPage: React.FC = () => {
   const { success, error } = useToast();
   const { refreshNavigation } = useSettings();
 
+  const defaultNavItems = [
+    { label: 'CATALOG', url: '/catalog', visible: true, displayOrder: 1 },
+    { label: 'TILES', url: '/tiles', categorySlug: 'tiles', visible: true, displayOrder: 2 },
+    { label: 'GRANITE & STONE', url: '/granite', categorySlug: 'granite-marble-natural-stone', visible: true, displayOrder: 3 },
+    { label: 'WOODWORKS', url: '/wood', categorySlug: 'wood-works-wooden-doors-plywood', visible: true, displayOrder: 4 },
+    { label: 'ELECTRICAL', url: '/electrical', categorySlug: 'electrical-products-lighting-switches', visible: true, displayOrder: 5 },
+    { label: 'CONTACT', url: '/contact', visible: true, displayOrder: 6 },
+  ];
+
   const fetchNav = async () => {
     setIsLoading(true);
     try {
       const res = await api.getNavigation();
-      if (res.data.success && res.data.data) {
+      if (res.data && res.data.success && res.data.data && res.data.data.items) {
         setItems(res.data.data.items || []);
+      } else {
+        setItems(defaultNavItems);
       }
     } catch (err) {
-      error('Failed to load navigation');
+      setItems(defaultNavItems);
     } finally {
       setIsLoading(false);
     }

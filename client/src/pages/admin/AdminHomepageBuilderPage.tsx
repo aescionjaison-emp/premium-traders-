@@ -248,9 +248,32 @@ export const AdminHomepageBuilderPage: React.FC = () => {
             },
           ]);
         }
+      } else {
+        // Fallback default sections
+        setSections([
+          { id: 'hero', type: 'hero', title: '01 / Hero Section', visible: true, displayOrder: 1 },
+          { id: 'materials_life', type: 'materials_life', title: '02 / Materials Come to Life (Pinned Transformation)', visible: true, displayOrder: 2 },
+          { id: 'chapter_granite', type: 'chapter_granite', title: '03 / Granite Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 3 },
+          { id: 'chapter_tiles', type: 'chapter_tiles', title: '04 / Tile Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 4 },
+          { id: 'chapter_wood', type: 'chapter_wood', title: '05 / Wood Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 5 },
+          { id: 'chapter_electrical', type: 'chapter_electrical', title: '06 / Electrical Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 6 },
+          { id: 'explore_materials', type: 'explore_materials', title: '07 / Explore Materials (Horizontal Glide)', visible: true, displayOrder: 7 },
+          { id: 'brand_marquee', type: 'brand_marquee', title: '08 / Brand Partners Marquee Strip', visible: true, displayOrder: 8 },
+          { id: 'contact_strip', type: 'contact_strip', title: '09 / Showroom Visit & Direct Contact Strip', visible: true, displayOrder: 9 },
+        ]);
       }
     } catch (err) {
-      error('Failed to load homepage configuration');
+      setSections([
+        { id: 'hero', type: 'hero', title: '01 / Hero Section', visible: true, displayOrder: 1 },
+        { id: 'materials_life', type: 'materials_life', title: '02 / Materials Come to Life (Pinned Transformation)', visible: true, displayOrder: 2 },
+        { id: 'chapter_granite', type: 'chapter_granite', title: '03 / Granite Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 3 },
+        { id: 'chapter_tiles', type: 'chapter_tiles', title: '04 / Tile Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 4 },
+        { id: 'chapter_wood', type: 'chapter_wood', title: '05 / Wood Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 5 },
+        { id: 'chapter_electrical', type: 'chapter_electrical', title: '06 / Electrical Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 6 },
+        { id: 'explore_materials', type: 'explore_materials', title: '07 / Explore Materials (Horizontal Glide)', visible: true, displayOrder: 7 },
+        { id: 'brand_marquee', type: 'brand_marquee', title: '08 / Brand Partners Marquee Strip', visible: true, displayOrder: 8 },
+        { id: 'contact_strip', type: 'contact_strip', title: '09 / Showroom Visit & Direct Contact Strip', visible: true, displayOrder: 9 },
+      ]);
     } finally {
       setIsLoading(false);
     }

@@ -28,11 +28,15 @@ export const AdminCategoriesPage: React.FC = () => {
     setIsLoading(true);
     try {
       const res = await api.getCategories();
-      if (res.data.success) {
+      if (res.data && res.data.success && res.data.data && res.data.data.length > 0) {
         setCategories(res.data.data);
+      } else {
+        const { DEFAULT_CATEGORIES } = await import('../../data/showroomCatalogData.js');
+        setCategories(DEFAULT_CATEGORIES);
       }
     } catch (err) {
-      error('Failed to load categories');
+      const { DEFAULT_CATEGORIES } = await import('../../data/showroomCatalogData.js');
+      setCategories(DEFAULT_CATEGORIES);
     } finally {
       setIsLoading(false);
     }

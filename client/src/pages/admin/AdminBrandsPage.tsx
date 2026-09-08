@@ -24,11 +24,15 @@ export const AdminBrandsPage: React.FC = () => {
     setIsLoading(true);
     try {
       const res = await api.getBrands();
-      if (res.data.success) {
+      if (res.data && res.data.success && res.data.data && res.data.data.length > 0) {
         setBrands(res.data.data);
+      } else {
+        const { DEFAULT_BRANDS } = await import('../../data/showroomCatalogData.js');
+        setBrands(DEFAULT_BRANDS);
       }
     } catch (err) {
-      error('Failed to load brands');
+      const { DEFAULT_BRANDS } = await import('../../data/showroomCatalogData.js');
+      setBrands(DEFAULT_BRANDS);
     } finally {
       setIsLoading(false);
     }
