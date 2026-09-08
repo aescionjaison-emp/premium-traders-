@@ -360,4 +360,94 @@ export const localStore = {
     const list = localStore.getEnquiries().filter((e) => e._id !== id);
     localStorage.setItem(K_ENQUIRIES, JSON.stringify(list));
   },
+
+  // --- Gallery ---
+  getGallery: (): IGalleryItem[] => {
+    const saved = localStorage.getItem(K_GALLERY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [];
+      }
+    }
+    const defaultGallery: IGalleryItem[] = [
+      { _id: 'gal-01', title: 'Grand Onyx Living Villa', category: 'Granite', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85', locationOrSpace: 'Bengaluru Villa', featured: true, visible: true, displayOrder: 1 },
+      { _id: 'gal-02', title: 'Calacatta Seamless Master Suite', category: 'Tiles', image: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=1200&q=85', locationOrSpace: 'Penthouse Residence', featured: true, visible: true, displayOrder: 2 },
+      { _id: 'gal-03', title: 'Solid Burmese Teak Portal', category: 'Wood Works', image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85', locationOrSpace: 'Architectural Entryway', featured: true, visible: true, displayOrder: 3 },
+      { _id: 'gal-04', title: 'Magnetic Track Lighting Suite', category: 'Electrical', image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1200&q=85', locationOrSpace: 'Design Studio Lounge', featured: true, visible: true, displayOrder: 4 },
+    ];
+    localStorage.setItem(K_GALLERY, JSON.stringify(defaultGallery));
+    return defaultGallery;
+  },
+
+  saveGalleryItem: (item: Partial<IGalleryItem>): IGalleryItem => {
+    const list = localStore.getGallery();
+    const id = item._id || `gal-${Date.now()}`;
+    const newItem: IGalleryItem = {
+      _id: id,
+      title: item.title || 'Gallery Space',
+      category: item.category || 'General',
+      image: item.image || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+      locationOrSpace: item.locationOrSpace || '',
+      featured: item.featured ?? true,
+      visible: item.visible ?? true,
+      displayOrder: item.displayOrder || list.length + 1,
+      ...item,
+    };
+    const idx = list.findIndex((g) => g._id === id);
+    if (idx >= 0) list[idx] = newItem;
+    else list.push(newItem);
+    localStorage.setItem(K_GALLERY, JSON.stringify(list));
+    return newItem;
+  },
+
+  deleteGalleryItem: (id: string) => {
+    const list = localStore.getGallery().filter((g) => g._id !== id);
+    localStorage.setItem(K_GALLERY, JSON.stringify(list));
+  },
+
+  // --- Media Library ---
+  getMedia: (): IMediaItem[] => {
+    const saved = localStorage.getItem(K_MEDIA);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [];
+      }
+    }
+    const defaultMedia: IMediaItem[] = [
+      { _id: 'med-01', filename: 'marble-texture-slab.jpg', name: 'Marble Texture Slab', url: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85', category: 'tiles', size: 102400, isVideo: false, createdAt: new Date().toISOString() },
+      { _id: 'med-02', filename: 'black-galaxy-quarry.jpg', name: 'Black Galaxy Quarry', url: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85', category: 'granite', size: 204800, isVideo: false, createdAt: new Date().toISOString() },
+      { _id: 'med-03', filename: 'burma-teak-door.jpg', name: 'Burma Teak Door', url: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85', category: 'wood', size: 154000, isVideo: false, createdAt: new Date().toISOString() },
+      { _id: 'med-04', filename: 'architectural-switchplate.jpg', name: 'Architectural Switchplate', url: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85', category: 'electrical', size: 98000, isVideo: false, createdAt: new Date().toISOString() },
+    ];
+    localStorage.setItem(K_MEDIA, JSON.stringify(defaultMedia));
+    return defaultMedia;
+  },
+
+  createMedia: (item: Partial<IMediaItem>): IMediaItem => {
+    const list = localStore.getMedia();
+    const id = item._id || `med-${Date.now()}`;
+    const newMedia: IMediaItem = {
+      _id: id,
+      filename: item.filename || item.name || 'uploaded-file.jpg',
+      name: item.name || item.filename || 'Uploaded Asset',
+      url: item.url || 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85',
+      category: item.category || 'general',
+      size: item.size || 1024,
+      isVideo: item.isVideo || false,
+      createdAt: new Date().toISOString(),
+      ...item,
+    };
+    list.unshift(newMedia);
+    localStorage.setItem(K_MEDIA, JSON.stringify(list));
+    return newMedia;
+  },
+
+  deleteMedia: (id: string) => {
+    const list = localStore.getMedia().filter((m) => m._id !== id);
+    localStorage.setItem(K_MEDIA, JSON.stringify(list));
+  },
 };

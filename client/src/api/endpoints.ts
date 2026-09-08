@@ -342,10 +342,11 @@ export const api = {
   getGallery: async (params?: { category?: string; featuredOnly?: boolean; visibleOnly?: boolean }) => {
     try {
       const res = await axiosClient.get<{ success: boolean; data: IGalleryItem[] }>('/gallery', { params });
-      if (res.data && res.data.success) return res;
+      if (res.data && res.data.success && res.data.data && res.data.data.length > 0) return res;
       throw new Error('Fallback to local');
     } catch {
-      return { data: { success: true, data: [] } };
+      const list = localStore.getGallery();
+      return { data: { success: true, data: list } };
     }
   },
 
@@ -355,7 +356,8 @@ export const api = {
       if (res.data && res.data.success) return res;
       throw new Error('Fallback to local');
     } catch {
-      return { data: { success: true, message: 'Gallery item saved', data: data as IGalleryItem } };
+      const saved = localStore.saveGalleryItem(data);
+      return { data: { success: true, message: 'Gallery item saved', data: saved } };
     }
   },
 
@@ -365,7 +367,8 @@ export const api = {
       if (res.data && res.data.success) return res;
       throw new Error('Fallback to local');
     } catch {
-      return { data: { success: true, message: 'Gallery item updated', data: { ...data, _id: id } as IGalleryItem } };
+      const saved = localStore.saveGalleryItem({ ...data, _id: id });
+      return { data: { success: true, message: 'Gallery item updated', data: saved } };
     }
   },
 
@@ -375,6 +378,7 @@ export const api = {
       if (res.data && res.data.success) return res;
       throw new Error('Fallback to local');
     } catch {
+      localStore.deleteGalleryItem(id);
       return { data: { success: true, message: 'Gallery item deleted' } };
     }
   },
@@ -527,10 +531,11 @@ export const api = {
   getMedia: async (params?: { category?: string; search?: string; isVideo?: boolean }) => {
     try {
       const res = await axiosClient.get<{ success: boolean; data: IMediaItem[] }>('/media', { params });
-      if (res.data && res.data.success) return res;
+      if (res.data && res.data.success && res.data.data && res.data.data.length > 0) return res;
       throw new Error('Fallback to local');
     } catch {
-      return { data: { success: true, data: [] } };
+      const list = localStore.getMedia();
+      return { data: { success: true, data: list } };
     }
   },
 
@@ -554,6 +559,7 @@ export const api = {
       const item: IMediaItem = {
         _id: `media-${Date.now()}`,
         name: file?.name || 'Uploaded Media',
+        filename: file?.name || 'Uploaded Media',
         url,
         publicId: `media-${Date.now()}`,
         format: file?.type || 'image/jpeg',
@@ -563,6 +569,7 @@ export const api = {
         isVideo: file?.type?.startsWith('video/') || false,
         createdAt: new Date().toISOString(),
       };
+      localStore.createMedia(item);
       return { data: { success: true, message: 'Media created', data: item } };
     }
   },
@@ -573,6 +580,7 @@ export const api = {
       if (res.data && res.data.success) return res;
       throw new Error('Fallback to local');
     } catch {
+      localStore.deleteMedia(id);
       return { data: { success: true, message: 'Media deleted' } };
     }
   },
