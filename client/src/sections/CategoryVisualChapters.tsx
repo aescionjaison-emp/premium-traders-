@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { IProduct, ICategoryChapters, ICategoryChapterItem } from '../types/index.js';
+import { MASTER_SHOWROOM_PRODUCTS } from '../data/showroomCatalogData.js';
 import { ProductCard } from '../components/common/ProductCard.js';
 import { MaskReveal } from '../components/common/MaskReveal.js';
 import { ScrollReveal } from '../components/common/ScrollReveal.js';
@@ -12,6 +13,8 @@ interface CategoryVisualChaptersProps {
 }
 
 export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ products, chapters }) => {
+  const allProducts = (products && products.length > 0) ? products : MASTER_SHOWROOM_PRODUCTS;
+
   const graniteData: ICategoryChapterItem = chapters?.granite || {
     id: 'granite',
     num: '01',
@@ -60,10 +63,10 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
     finishes: ['Brushed Brass', 'Matte Black', 'Touch Glass'],
   };
 
-  const graniteProducts = products
+  const graniteProducts = allProducts
     .filter(
       (p) =>
-        p.visible &&
+        p.visible !== false &&
         (p.categorySlug === 'granite-marble-natural-stone' ||
           p.material?.toLowerCase().includes('granite') ||
           p.material?.toLowerCase().includes('marble') ||
@@ -72,10 +75,10 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
     )
     .slice(0, 4);
 
-  const tileProducts = products
+  const tileProducts = allProducts
     .filter(
       (p) =>
-        p.visible &&
+        p.visible !== false &&
         (p.categorySlug === 'tiles' ||
           p.material?.toLowerCase().includes('tile') ||
           p.material?.toLowerCase().includes('porcelain') ||
@@ -84,10 +87,10 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
     )
     .slice(0, 4);
 
-  const woodProducts = products
+  const woodProducts = allProducts
     .filter(
       (p) =>
-        p.visible &&
+        p.visible !== false &&
         (p.categorySlug === 'wood-works-wooden-doors-plywood' ||
           p.material?.toLowerCase().includes('teak') ||
           p.material?.toLowerCase().includes('wood') ||
@@ -98,10 +101,10 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
     )
     .slice(0, 4);
 
-  const electricalProducts = products
+  const electricalProducts = allProducts
     .filter(
       (p) =>
-        p.visible &&
+        p.visible !== false &&
         (p.categorySlug === 'electrical-products-lighting-switches' ||
           p.material?.toLowerCase().includes('brass') ||
           p.material?.toLowerCase().includes('switch') ||

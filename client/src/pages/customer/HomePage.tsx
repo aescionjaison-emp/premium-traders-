@@ -15,11 +15,13 @@ import { ExploreMaterialsHorizontalSection } from '../../sections/ExploreMateria
 import { BrandMarqueeSection } from '../../sections/BrandMarqueeSection.js';
 import { ContactStripSection } from '../../sections/ContactStripSection.js';
 
+import { MASTER_SHOWROOM_PRODUCTS } from '../../data/showroomCatalogData.js';
+
 export const HomePage: React.FC = () => {
   const [config, setConfig] = useState<IHomepageConfig | null>(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([]);
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<IProduct[]>(MASTER_SHOWROOM_PRODUCTS);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -43,9 +45,12 @@ export const HomePage: React.FC = () => {
         }
         if (prodsRes.data?.success && prodsRes.data.data && prodsRes.data.data.length > 0) {
           setProducts(prodsRes.data.data);
+        } else {
+          setProducts(MASTER_SHOWROOM_PRODUCTS);
         }
       } catch (err) {
         console.error('Error fetching homepage data:', err);
+        setProducts(MASTER_SHOWROOM_PRODUCTS);
       } finally {
         setIsLoading(false);
       }

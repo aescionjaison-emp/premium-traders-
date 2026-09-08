@@ -73,7 +73,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
   }, [currentVideoSrc]);
 
   const handleScrollDown = () => {
-    const nextSection = document.getElementById('section-disciplines') || document.getElementById('section-categories');
+    const nextSection =
+      document.getElementById('section-materials-life') ||
+      document.getElementById('chapter-granite') ||
+      document.getElementById('section-categories');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
     } else {
