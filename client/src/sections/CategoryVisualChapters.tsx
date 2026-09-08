@@ -15,52 +15,56 @@ interface CategoryVisualChaptersProps {
 export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ products, chapters }) => {
   const allProducts = (products && products.length > 0) ? products : MASTER_SHOWROOM_PRODUCTS;
 
-  const graniteData: ICategoryChapterItem = chapters?.granite || {
+  const graniteData: ICategoryChapterItem = {
     id: 'granite',
     num: '01',
-    name: 'Granite Collection',
+    name: 'Granite & Natural Stone',
     tagline: 'Natural Stone',
-    desc: '',
+    desc: 'Direct quarry-sourced slabs',
     coverImage: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85',
     textureImage: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85',
     spaceImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
     finishes: ['Polished', 'Honed', 'Leathered'],
+    ...chapters?.granite,
   };
 
-  const tileData: ICategoryChapterItem = chapters?.tiles || {
+  const tileData: ICategoryChapterItem = {
     id: 'tiles',
     num: '02',
-    name: 'Tile Collection',
+    name: 'Large Format Tiles & Porcelain',
     tagline: 'Modern Surfaces',
-    desc: '',
+    desc: 'Monumental porcelain slabs',
     coverImage: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85',
     textureImage: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85',
     spaceImage: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=1200&q=85',
     finishes: ['Glossy', 'Satin Matt', 'Carving'],
+    ...chapters?.tiles,
   };
 
-  const woodData: ICategoryChapterItem = chapters?.wood || {
+  const woodData: ICategoryChapterItem = {
     id: 'wood',
     num: '03',
-    name: 'Wood Collection',
+    name: 'Fine Woodworks & Teak Doors',
     tagline: 'Crafted Wood',
-    desc: '',
+    desc: 'Solid Teak & Joinery',
     coverImage: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85',
     textureImage: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85',
     spaceImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85',
     finishes: ['Natural Teak', 'Smoked Oak', 'Veneer'],
+    ...chapters?.wood,
   };
 
-  const electricalData: ICategoryChapterItem = chapters?.electrical || {
+  const electricalData: ICategoryChapterItem = {
     id: 'electrical',
     num: '04',
-    name: 'Electrical Collection',
+    name: 'Luxury Electrical & Lighting',
     tagline: 'Smart Essentials',
-    desc: '',
+    desc: 'Solid Brass & Magnetic Tracks',
     coverImage: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85',
     textureImage: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85',
     spaceImage: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1200&q=85',
     finishes: ['Brushed Brass', 'Matte Black', 'Touch Glass'],
+    ...chapters?.electrical,
   };
 
   const defaultGraniteProds = MASTER_SHOWROOM_PRODUCTS.filter(
@@ -97,79 +101,84 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
       p.name?.toLowerCase().includes('downlight')
   ).slice(0, 4);
 
-  let graniteProducts = allProducts
-    .filter(
-      (p) =>
-        p.visible !== false &&
-        (p.categorySlug === 'granite-marble-natural-stone' ||
-          p.categorySlug === 'granite' ||
-          (typeof p.category === 'object' && (p.category?.slug === 'granite-marble-natural-stone' || p.category?.slug === 'granite' || p.category?._id === 'cat-granite')) ||
-          p.category === 'cat-granite' ||
-          p.sku?.startsWith('GRN') ||
-          p.material?.toLowerCase().includes('granite') ||
-          p.material?.toLowerCase().includes('marble') ||
-          p.material?.toLowerCase().includes('stone') ||
-          p.material?.toLowerCase().includes('quartzite'))
-    )
-    .slice(0, 4);
-  if (graniteProducts.length < 4) graniteProducts = defaultGraniteProds;
+  const userGraniteProds = allProducts.filter(
+    (p) =>
+      p.visible !== false &&
+      (p.categorySlug === 'granite-marble-natural-stone' ||
+        p.categorySlug === 'granite' ||
+        (typeof p.category === 'object' && (p.category?.slug === 'granite-marble-natural-stone' || p.category?.slug === 'granite' || p.category?._id === 'cat-granite')) ||
+        p.category === 'cat-granite' ||
+        p.sku?.startsWith('GRN') ||
+        p.material?.toLowerCase().includes('granite') ||
+        p.material?.toLowerCase().includes('marble') ||
+        p.material?.toLowerCase().includes('stone') ||
+        p.material?.toLowerCase().includes('quartzite'))
+  );
+  const graniteProducts: IProduct[] = [
+    ...userGraniteProds,
+    ...defaultGraniteProds.filter((def) => !userGraniteProds.some((u) => u._id === def._id || u.sku === def.sku)),
+  ].slice(0, 4);
 
-  let tileProducts = allProducts
-    .filter(
-      (p) =>
-        p.visible !== false &&
-        (p.categorySlug === 'tiles' ||
-          (typeof p.category === 'object' && (p.category?.slug === 'tiles' || p.category?._id === 'cat-tiles')) ||
-          p.category === 'cat-tiles' ||
-          p.sku?.startsWith('TIL') ||
-          p.material?.toLowerCase().includes('tile') ||
-          p.material?.toLowerCase().includes('porcelain') ||
-          p.material?.toLowerCase().includes('vitrified') ||
-          p.material?.toLowerCase().includes('ceramic'))
-    )
-    .slice(0, 4);
-  if (tileProducts.length < 4) tileProducts = defaultTileProds;
+  const userTileProds = allProducts.filter(
+    (p) =>
+      p.visible !== false &&
+      (p.categorySlug === 'tiles' ||
+        (typeof p.category === 'object' && (p.category?.slug === 'tiles' || p.category?._id === 'cat-tiles')) ||
+        p.category === 'cat-tiles' ||
+        p.sku?.startsWith('TIL') ||
+        p.material?.toLowerCase().includes('tile') ||
+        p.material?.toLowerCase().includes('porcelain') ||
+        p.material?.toLowerCase().includes('vitrified') ||
+        p.material?.toLowerCase().includes('ceramic'))
+  );
+  const tileProducts: IProduct[] = [
+    ...userTileProds,
+    ...defaultTileProds.filter((def) => !userTileProds.some((u) => u._id === def._id || u.sku === def.sku)),
+  ].slice(0, 4);
 
-  let woodProducts = allProducts
-    .filter(
-      (p) =>
-        p.visible !== false &&
-        (p.categorySlug === 'wood-works-wooden-doors-plywood' ||
-          p.categorySlug === 'wood' ||
-          (typeof p.category === 'object' && (p.category?.slug === 'wood-works-wooden-doors-plywood' || p.category?.slug === 'wood' || p.category?._id === 'cat-wood')) ||
-          p.category === 'cat-wood' ||
-          p.sku?.startsWith('WOD') ||
-          p.material?.toLowerCase().includes('teak') ||
-          p.material?.toLowerCase().includes('wood') ||
-          p.material?.toLowerCase().includes('oak') ||
-          p.material?.toLowerCase().includes('plywood') ||
-          p.material?.toLowerCase().includes('veneer') ||
-          p.material?.toLowerCase().includes('door'))
-    )
-    .slice(0, 4);
-  if (woodProducts.length < 4) woodProducts = defaultWoodProds;
+  const userWoodProds = allProducts.filter(
+    (p) =>
+      p.visible !== false &&
+      (p.categorySlug === 'wood-works-wooden-doors-plywood' ||
+        p.categorySlug === 'wood' ||
+        (typeof p.category === 'object' && (p.category?.slug === 'wood-works-wooden-doors-plywood' || p.category?.slug === 'wood' || p.category?._id === 'cat-wood')) ||
+        p.category === 'cat-wood' ||
+        p.sku?.startsWith('WOD') ||
+        p.material?.toLowerCase().includes('teak') ||
+        p.material?.toLowerCase().includes('wood') ||
+        p.material?.toLowerCase().includes('oak') ||
+        p.material?.toLowerCase().includes('plywood') ||
+        p.material?.toLowerCase().includes('veneer') ||
+        p.material?.toLowerCase().includes('door'))
+  );
+  const woodProducts: IProduct[] = [
+    ...userWoodProds,
+    ...defaultWoodProds.filter((def) => !userWoodProds.some((u) => u._id === def._id || u.sku === def.sku)),
+  ].slice(0, 4);
 
-  let electricalProducts = allProducts
-    .filter(
-      (p) =>
-        p.visible !== false &&
-        (p.categorySlug === 'electrical-products-lighting-switches' ||
-          p.categorySlug === 'electrical' ||
-          (typeof p.category === 'object' && (p.category?.slug === 'electrical-products-lighting-switches' || p.category?.slug === 'electrical' || p.category?._id === 'cat-elec')) ||
-          p.category === 'cat-elec' ||
-          p.sku?.startsWith('ELC') ||
-          p.name?.toLowerCase().includes('switch') ||
-          p.name?.toLowerCase().includes('track') ||
-          p.name?.toLowerCase().includes('fan') ||
-          p.name?.toLowerCase().includes('downlight') ||
-          p.name?.toLowerCase().includes('lighting') ||
-          p.material?.toLowerCase().includes('brass') ||
-          p.material?.toLowerCase().includes('switch') ||
-          p.material?.toLowerCase().includes('light') ||
-          p.material?.toLowerCase().includes('fan'))
-    )
-    .slice(0, 4);
-  if (electricalProducts.length < 4) electricalProducts = defaultElecProds;
+  const userElecProds = allProducts.filter(
+    (p) =>
+      p.visible !== false &&
+      (p.categorySlug === 'electrical-products-lighting-switches' ||
+        p.categorySlug === 'electrical' ||
+        (typeof p.category === 'object' && (p.category?.slug === 'electrical-products-lighting-switches' || p.category?.slug === 'electrical' || p.category?._id === 'cat-elec')) ||
+        p.category === 'cat-elec' ||
+        p.sku?.toUpperCase().startsWith('ELC') ||
+        p.name?.toLowerCase().includes('switch') ||
+        p.name?.toLowerCase().includes('track') ||
+        p.name?.toLowerCase().includes('fan') ||
+        p.name?.toLowerCase().includes('downlight') ||
+        p.name?.toLowerCase().includes('lighting') ||
+        p.name?.toLowerCase().includes('brass') ||
+        p.material?.toLowerCase().includes('brass') ||
+        p.material?.toLowerCase().includes('switch') ||
+        p.material?.toLowerCase().includes('light') ||
+        p.material?.toLowerCase().includes('fan'))
+  );
+  const electricalProducts: IProduct[] = [
+    ...userElecProds,
+    ...defaultElecProds.filter((def) => !userElecProds.some((u) => u._id === def._id || u.sku === def.sku)),
+  ].slice(0, 4);
 
   return (
     <div className="bg-[#FAF9F5] text-showroom-charcoal">
