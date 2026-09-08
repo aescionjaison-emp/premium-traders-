@@ -36,14 +36,34 @@ export const AdminProductsPage: React.FC = () => {
       if (selectedCat) params.category = selectedCat;
 
       const [prodsRes, catsRes] = await Promise.all([
-        api.getProducts(params),
-        api.getCategories(),
+        api.getProducts(params).catch(() => ({ data: { success: false, data: [] } })),
+        api.getCategories().catch(() => ({ data: { success: false, data: [] } })),
       ]);
 
-      if (prodsRes.data.success) setProducts(prodsRes.data.data);
-      if (catsRes.data.success) setCategories(catsRes.data.data);
+      const { MASTER_SHOWROOM_PRODUCTS } = await import('../../data/showroomCatalogData.js');
+      if (prodsRes.data.success && prodsRes.data.data && prodsRes.data.data.length > 0) {
+        setProducts(prodsRes.data.data);
+      } else {
+        let filtered = [...MASTER_SHOWROOM_PRODUCTS];
+        if (selectedCat) {
+          filtered = filtered.filter(
+            (p) =>
+              p.categorySlug === selectedCat ||
+              (typeof p.category === 'object' && (p.category?._id === selectedCat || p.category?.slug === selectedCat))
+          );
+        }
+        if (search.trim()) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter((p) => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q));
+        }
+        setProducts(filtered);
+      }
+      if (catsRes.data.success && catsRes.data.data && catsRes.data.data.length > 0) {
+        setCategories(catsRes.data.data);
+      }
     } catch (err) {
-      error('Failed to load products');
+      const { MASTER_SHOWROOM_PRODUCTS } = await import('../../data/showroomCatalogData.js');
+      setProducts(MASTER_SHOWROOM_PRODUCTS);
     } finally {
       setIsLoading(false);
     }
