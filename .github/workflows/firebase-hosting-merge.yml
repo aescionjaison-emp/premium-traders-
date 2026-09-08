@@ -20,6 +20,8 @@ jobs:
           cache-dependency-path: client/package-lock.json
 
       - name: Install Dependencies & Build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           cd client
           npm ci
