@@ -56,6 +56,7 @@ export interface ICollection {
   _id: string;
   name: string;
   slug: string;
+  categorySlug?: string;
   description?: string;
   image?: string;
   bannerImage?: string;
@@ -68,6 +69,7 @@ export interface ICollection {
 export interface IBrand {
   _id: string;
   name: string;
+  slug?: string;
   logo?: string;
   category?: string;
   categorySlug?: string;
@@ -152,16 +154,14 @@ export interface IHomepageSection {
   id: string;
   type: string;
   title: string;
-  subtitle?: string;
   visible: boolean;
   displayOrder: number;
-  settings?: Record<string, any>;
 }
 
 export interface IHomepageConfig {
   _id?: string;
   heroSlides: IHeroSlide[];
-  materialsComeToLife?: IMaterialsLifeSlide[];
+  materialsComeToLife: IMaterialsLifeSlide[];
   categoryChapters?: ICategoryChapters;
   exploreMaterials?: IExploreMaterialItem[];
   sections: IHomepageSection[];
@@ -172,9 +172,12 @@ export interface IHomepageConfig {
 export interface IMediaItem {
   _id: string;
   url: string;
-  filename: string;
+  name?: string;
+  filename?: string;
   category: string;
-  mimeType: string;
+  mimeType?: string;
+  format?: string;
+  tags?: string[];
   isVideo: boolean;
   size: number;
   publicId?: string;
@@ -229,6 +232,8 @@ export interface IEnquiry {
   productName?: string;
   productSku?: string;
   category?: string;
+  projectType?: string;
+  quantity?: string;
   message?: string;
   status: 'NEW' | 'CONTACTED' | 'CLOSED';
   notes?: string;
