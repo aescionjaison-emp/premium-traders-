@@ -56,6 +56,11 @@ export const HomePage: React.FC = () => {
       }
     };
     fetchData();
+
+    window.addEventListener('storage', fetchData);
+    return () => {
+      window.removeEventListener('storage', fetchData);
+    };
   }, []);
 
   if (isLoading) {

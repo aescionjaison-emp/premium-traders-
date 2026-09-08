@@ -12,6 +12,15 @@ import {
   IMediaItem,
 } from '../types/index.js';
 import { localStore } from './localStore.js';
+import { cloudStore } from './cloudStore.js';
+
+let hasPulledCloud = false;
+const ensureCloudSync = () => {
+  if (!hasPulledCloud && typeof window !== 'undefined') {
+    hasPulledCloud = true;
+    cloudStore.pullCloudToLocal().catch(() => {});
+  }
+};
 
 export const api = {
   // Products
@@ -623,5 +632,17 @@ export const api = {
       return { data: { success: true, user } };
     }
   },
+
+  // Cloud Synchronization
+  syncAllToCloud: async () => {
+    const ok = await cloudStore.syncLocalToCloud();
+    return { data: { success: ok, message: ok ? 'All changes synchronized to Cloud Firestore!' : 'Cloud sync failed' } };
+  },
+
+  pullFromCloud: async () => {
+    const ok = await cloudStore.pullCloudToLocal();
+    return { data: { success: ok, message: ok ? 'Updated with latest changes from Cloud Firestore!' : 'Already up to date' } };
+  },
 };
+
 

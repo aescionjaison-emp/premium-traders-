@@ -1,12 +1,32 @@
 import React, { useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { Menu, ExternalLink } from 'lucide-react';
+import { Menu, ExternalLink, CloudUpload, RefreshCw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { AdminSidebar } from './AdminSidebar.js';
+import { api } from '../../api/endpoints.js';
+import { useToast } from '../../context/ToastContext.js';
 
 export const AdminLayout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const { success, error } = useToast();
+
+  const handleCloudSync = async () => {
+    setIsSyncing(true);
+    try {
+      const res = await api.syncAllToCloud();
+      if (res.data.success) {
+        success('All CMS data synced to Cloud Firestore! Visible on all domains.');
+      } else {
+        error('Could not sync to cloud.');
+      }
+    } catch {
+      error('Failed to sync to cloud.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -40,7 +60,18 @@ export const AdminLayout: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={handleCloudSync}
+              disabled={isSyncing}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-showroom-bronze hover:bg-showroom-bronzeHover text-white text-[11px] font-bold uppercase tracking-wider transition-colors disabled:opacity-50"
+              title="Push all local changes to Cloud Database (syncs .web.app & .firebaseapp.com)"
+            >
+              <CloudUpload className={`w-3.5 h-3.5 ${isSyncing ? 'animate-bounce' : ''}`} />
+              <span>{isSyncing ? 'Syncing...' : 'Sync Cloud'}</span>
+            </button>
+
             <a
               href="/"
               target="_blank"

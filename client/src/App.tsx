@@ -33,6 +33,8 @@ import { AdminNavigationPage } from './pages/admin/AdminNavigationPage.js';
 import { AdminEnquiriesPage } from './pages/admin/AdminEnquiriesPage.js';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage.js';
 
+import { cloudStore } from './api/cloudStore.js';
+
 // Customer Layout Shell
 const CustomerLayout: React.FC = () => {
   return (
@@ -51,6 +53,15 @@ const CustomerLayout: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  React.useEffect(() => {
+    // Proactively pull latest CMS changes from Firestore to keep web.app & firebaseapp.com synchronized
+    cloudStore.pullCloudToLocal().then((updated) => {
+      if (updated) {
+        window.dispatchEvent(new Event('storage'));
+      }
+    });
+  }, []);
+
   return (
     <Routes>
       {/* Customer Routes */}
