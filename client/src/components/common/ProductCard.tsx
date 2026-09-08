@@ -53,12 +53,14 @@ export const getShortProductName = (name: string): string => {
 };
 
 export const getCategoryShortName = (product: IProduct): string => {
-  const cat = (product.categorySlug || '').toLowerCase();
+  const cat = (product.categorySlug || (typeof product.category === 'object' ? product.category?.slug : product.category) || '').toLowerCase();
   const mat = (product.material || '').toLowerCase();
-  if (cat.includes('granite') || mat.includes('granite') || mat.includes('stone') || mat.includes('quartzite')) return 'Granite';
-  if (cat.includes('tiles') || mat.includes('tile') || mat.includes('porcelain') || mat.includes('vitrified')) return 'Tiles';
-  if (cat.includes('wood') || mat.includes('wood') || mat.includes('teak') || mat.includes('door')) return 'Wood';
-  if (cat.includes('electrical') || mat.includes('brass') || mat.includes('switch') || mat.includes('light')) return 'Electrical';
+  const name = (product.name || '').toLowerCase();
+  const sku = (product.sku || '').toLowerCase();
+  if (cat.includes('elec') || mat.includes('brass') || mat.includes('switch') || mat.includes('light') || mat.includes('fan') || name.includes('switch') || name.includes('light') || name.includes('fan') || sku.includes('elc')) return 'Electrical';
+  if (cat.includes('granite') || mat.includes('granite') || mat.includes('stone') || mat.includes('quartzite') || sku.includes('grn')) return 'Granite';
+  if (cat.includes('wood') || mat.includes('wood') || mat.includes('teak') || mat.includes('door') || mat.includes('plywood') || sku.includes('wod')) return 'Wood';
+  if (cat.includes('tile') || mat.includes('tile') || mat.includes('porcelain') || mat.includes('vitrified') || sku.includes('til')) return 'Tiles';
   return 'Material';
 };
 

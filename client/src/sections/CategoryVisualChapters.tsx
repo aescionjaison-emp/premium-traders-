@@ -63,35 +63,82 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
     finishes: ['Brushed Brass', 'Matte Black', 'Touch Glass'],
   };
 
-  const graniteProducts = allProducts
+  const defaultGraniteProds = MASTER_SHOWROOM_PRODUCTS.filter(
+    (p) =>
+      p.categorySlug === 'granite-marble-natural-stone' ||
+      p.categorySlug === 'granite' ||
+      p.sku?.startsWith('GRN') ||
+      p.material?.toLowerCase().includes('granite')
+  ).slice(0, 4);
+
+  const defaultTileProds = MASTER_SHOWROOM_PRODUCTS.filter(
+    (p) =>
+      p.categorySlug === 'tiles' ||
+      p.sku?.startsWith('TIL') ||
+      p.material?.toLowerCase().includes('porcelain')
+  ).slice(0, 4);
+
+  const defaultWoodProds = MASTER_SHOWROOM_PRODUCTS.filter(
+    (p) =>
+      p.categorySlug === 'wood-works-wooden-doors-plywood' ||
+      p.categorySlug === 'wood' ||
+      p.sku?.startsWith('WOD') ||
+      p.material?.toLowerCase().includes('teak')
+  ).slice(0, 4);
+
+  const defaultElecProds = MASTER_SHOWROOM_PRODUCTS.filter(
+    (p) =>
+      p.categorySlug === 'electrical-products-lighting-switches' ||
+      p.categorySlug === 'electrical' ||
+      p.sku?.startsWith('ELC') ||
+      p.name?.toLowerCase().includes('switch') ||
+      p.name?.toLowerCase().includes('track') ||
+      p.name?.toLowerCase().includes('fan') ||
+      p.name?.toLowerCase().includes('downlight')
+  ).slice(0, 4);
+
+  let graniteProducts = allProducts
     .filter(
       (p) =>
         p.visible !== false &&
         (p.categorySlug === 'granite-marble-natural-stone' ||
+          p.categorySlug === 'granite' ||
+          (typeof p.category === 'object' && (p.category?.slug === 'granite-marble-natural-stone' || p.category?.slug === 'granite' || p.category?._id === 'cat-granite')) ||
+          p.category === 'cat-granite' ||
+          p.sku?.startsWith('GRN') ||
           p.material?.toLowerCase().includes('granite') ||
           p.material?.toLowerCase().includes('marble') ||
           p.material?.toLowerCase().includes('stone') ||
           p.material?.toLowerCase().includes('quartzite'))
     )
     .slice(0, 4);
+  if (graniteProducts.length < 4) graniteProducts = defaultGraniteProds;
 
-  const tileProducts = allProducts
+  let tileProducts = allProducts
     .filter(
       (p) =>
         p.visible !== false &&
         (p.categorySlug === 'tiles' ||
+          (typeof p.category === 'object' && (p.category?.slug === 'tiles' || p.category?._id === 'cat-tiles')) ||
+          p.category === 'cat-tiles' ||
+          p.sku?.startsWith('TIL') ||
           p.material?.toLowerCase().includes('tile') ||
           p.material?.toLowerCase().includes('porcelain') ||
           p.material?.toLowerCase().includes('vitrified') ||
           p.material?.toLowerCase().includes('ceramic'))
     )
     .slice(0, 4);
+  if (tileProducts.length < 4) tileProducts = defaultTileProds;
 
-  const woodProducts = allProducts
+  let woodProducts = allProducts
     .filter(
       (p) =>
         p.visible !== false &&
         (p.categorySlug === 'wood-works-wooden-doors-plywood' ||
+          p.categorySlug === 'wood' ||
+          (typeof p.category === 'object' && (p.category?.slug === 'wood-works-wooden-doors-plywood' || p.category?.slug === 'wood' || p.category?._id === 'cat-wood')) ||
+          p.category === 'cat-wood' ||
+          p.sku?.startsWith('WOD') ||
           p.material?.toLowerCase().includes('teak') ||
           p.material?.toLowerCase().includes('wood') ||
           p.material?.toLowerCase().includes('oak') ||
@@ -100,18 +147,29 @@ export const CategoryVisualChapters: React.FC<CategoryVisualChaptersProps> = ({ 
           p.material?.toLowerCase().includes('door'))
     )
     .slice(0, 4);
+  if (woodProducts.length < 4) woodProducts = defaultWoodProds;
 
-  const electricalProducts = allProducts
+  let electricalProducts = allProducts
     .filter(
       (p) =>
         p.visible !== false &&
         (p.categorySlug === 'electrical-products-lighting-switches' ||
+          p.categorySlug === 'electrical' ||
+          (typeof p.category === 'object' && (p.category?.slug === 'electrical-products-lighting-switches' || p.category?.slug === 'electrical' || p.category?._id === 'cat-elec')) ||
+          p.category === 'cat-elec' ||
+          p.sku?.startsWith('ELC') ||
+          p.name?.toLowerCase().includes('switch') ||
+          p.name?.toLowerCase().includes('track') ||
+          p.name?.toLowerCase().includes('fan') ||
+          p.name?.toLowerCase().includes('downlight') ||
+          p.name?.toLowerCase().includes('lighting') ||
           p.material?.toLowerCase().includes('brass') ||
           p.material?.toLowerCase().includes('switch') ||
           p.material?.toLowerCase().includes('light') ||
           p.material?.toLowerCase().includes('fan'))
     )
     .slice(0, 4);
+  if (electricalProducts.length < 4) electricalProducts = defaultElecProds;
 
   return (
     <div className="bg-[#FAF9F5] text-showroom-charcoal">
