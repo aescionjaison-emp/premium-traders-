@@ -26,6 +26,8 @@ const K_HOMEPAGE = 'showroom_homepage_db';
 const K_SETTINGS = 'showroom_settings_db';
 const K_NAVIGATION = 'showroom_navigation_db';
 const K_ENQUIRIES = 'showroom_enquiries_db';
+const K_GALLERY = 'showroom_gallery_db';
+const K_MEDIA = 'showroom_media_db';
 
 export const localStore = {
   // --- Products ---
