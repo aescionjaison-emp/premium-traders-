@@ -591,11 +591,11 @@ export const DEFAULT_COLLECTIONS = [
 ];
 
 export const DEFAULT_BRANDS = [
-  { _id: 'brand-01', name: 'Varmora Granito', slug: 'varmora-granito', categorySlug: 'tiles', featured: true, visible: true, displayOrder: 1 },
-  { _id: 'brand-02', name: 'Kajaria Ceramics', slug: 'kajaria-ceramics', categorySlug: 'tiles', featured: true, visible: true, displayOrder: 2 },
-  { _id: 'brand-03', name: 'Somany Ceramics', slug: 'somany-ceramics', categorySlug: 'tiles', featured: true, visible: true, displayOrder: 3 },
-  { _id: 'brand-04', name: 'Schneider Electric', slug: 'schneider-electric', categorySlug: 'electrical-products-lighting-switches', featured: true, visible: true, displayOrder: 4 },
-  { _id: 'brand-05', name: 'Greenlam Veneers', slug: 'greenlam-veneers', categorySlug: 'wood-works-wooden-doors-plywood', featured: true, visible: true, displayOrder: 5 },
-  { _id: 'brand-06', name: 'Century Ply', slug: 'century-ply', categorySlug: 'wood-works-wooden-doors-plywood', featured: true, visible: true, displayOrder: 6 },
-  { _id: 'brand-07', name: 'Havells Studio', slug: 'havells-studio', categorySlug: 'electrical-products-lighting-switches', featured: true, visible: true, displayOrder: 7 },
+  { _id: 'brand-01', name: 'Varmora Granito', slug: 'varmora-granito', categorySlug: 'tiles', logo: '', featured: true, visible: true, displayOrder: 1 },
+  { _id: 'brand-02', name: 'Kajaria Ceramics', slug: 'kajaria-ceramics', categorySlug: 'tiles', logo: '', featured: true, visible: true, displayOrder: 2 },
+  { _id: 'brand-03', name: 'Somany Ceramics', slug: 'somany-ceramics', categorySlug: 'tiles', logo: '', featured: true, visible: true, displayOrder: 3 },
+  { _id: 'brand-04', name: 'Schneider Electric', slug: 'schneider-electric', categorySlug: 'electrical-products-lighting-switches', logo: '', featured: true, visible: true, displayOrder: 4 },
+  { _id: 'brand-05', name: 'Greenlam Veneers', slug: 'greenlam-veneers', categorySlug: 'wood-works-wooden-doors-plywood', logo: '', featured: true, visible: true, displayOrder: 5 },
+  { _id: 'brand-06', name: 'Century Ply', slug: 'century-ply', categorySlug: 'wood-works-wooden-doors-plywood', logo: '', featured: true, visible: true, displayOrder: 6 },
+  { _id: 'brand-07', name: 'Havells Studio', slug: 'havells-studio', categorySlug: 'electrical-products-lighting-switches', logo: '', featured: true, visible: true, displayOrder: 7 },
 ];

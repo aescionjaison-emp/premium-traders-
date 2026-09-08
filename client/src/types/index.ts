@@ -68,8 +68,10 @@ export interface ICollection {
 export interface IBrand {
   _id: string;
   name: string;
-  logo: string;
+  logo?: string;
   category?: string;
+  categorySlug?: string;
+  featured?: boolean;
   visible: boolean;
   displayOrder: number;
 }
