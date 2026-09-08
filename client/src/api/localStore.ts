@@ -464,4 +464,42 @@ export const localStore = {
     const list = localStore.getMedia().filter((m) => m._id !== id);
     localStorage.setItem(K_MEDIA, JSON.stringify(list));
   },
+
+  // Export full snapshot of all CMS data
+  exportAllData: (): string => {
+    const payload = {
+      products: localStore.getProducts().data,
+      homepage: localStore.getHomepageConfig(),
+      categories: localStore.getCategories(),
+      collections: localStore.getCollections(),
+      brands: localStore.getBrands(),
+      settings: localStore.getSettings(),
+      navigation: localStore.getNavigation(),
+      gallery: localStore.getGallery(),
+      media: localStore.getMedia(),
+      exportedAt: new Date().toISOString(),
+    };
+    return JSON.stringify(payload, null, 2);
+  },
+
+  // Import snapshot of CMS data
+  importAllData: (jsonData: string | Record<string, any>): boolean => {
+    try {
+      const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+      if (data.products) localStorage.setItem(K_PRODUCTS, JSON.stringify(data.products));
+      if (data.homepage) localStorage.setItem(K_HOMEPAGE, JSON.stringify(data.homepage));
+      if (data.categories) localStorage.setItem(K_CATEGORIES, JSON.stringify(data.categories));
+      if (data.collections) localStorage.setItem(K_COLLECTIONS, JSON.stringify(data.collections));
+      if (data.brands) localStorage.setItem(K_BRANDS, JSON.stringify(data.brands));
+      if (data.settings) localStorage.setItem(K_SETTINGS, JSON.stringify(data.settings));
+      if (data.navigation) localStorage.setItem(K_NAVIGATION, JSON.stringify(data.navigation));
+      if (data.gallery) localStorage.setItem(K_GALLERY, JSON.stringify(data.gallery));
+      if (data.media) localStorage.setItem(K_MEDIA, JSON.stringify(data.media));
+      window.dispatchEvent(new Event('storage'));
+      return true;
+    } catch (e) {
+      console.error('Failed to import data:', e);
+      return false;
+    }
+  },
 };

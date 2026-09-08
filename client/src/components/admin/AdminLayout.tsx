@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { Menu, ExternalLink, CloudUpload, RefreshCw } from 'lucide-react';
+import { Menu, ExternalLink, CloudUpload, Download, Upload } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { AdminSidebar } from './AdminSidebar.js';
 import { api } from '../../api/endpoints.js';
+import { localStore } from '../../api/localStore.js';
 import { useToast } from '../../context/ToastContext.js';
 
 export const AdminLayout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { success, error } = useToast();
 
   const handleCloudSync = async () => {
@@ -19,13 +21,55 @@ export const AdminLayout: React.FC = () => {
       if (res.data.success) {
         success('All CMS data synced to Cloud Firestore! Visible on all domains.');
       } else {
-        error('Could not sync to cloud.');
+        error('Firestore rules blocked. Use "Export Data" below to transfer instantly!');
       }
     } catch {
-      error('Failed to sync to cloud.');
+      error('Firestore sync error. Use "Export Data" to transfer instantly.');
     } finally {
       setIsSyncing(false);
     }
+  };
+
+  const handleExportData = () => {
+    try {
+      const jsonString = localStore.exportAllData();
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ambrosia_cms_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      success('CMS Data exported! You can now import this file on any domain.');
+    } catch {
+      error('Failed to export CMS data.');
+    }
+  };
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const ok = localStore.importAllData(content);
+        if (ok) {
+          success('CMS Data imported and merged successfully! Reloading...');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          error('Invalid CMS backup file format.');
+        }
+      } catch {
+        error('Failed to parse CMS backup file.');
+      }
+    };
+    reader.readAsText(file);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   if (isLoading) {
@@ -47,7 +91,7 @@ export const AdminLayout: React.FC = () => {
       {/* Main Content Area */}
       <div className="lg:pl-64 flex flex-col flex-1">
         {/* Top Header Bar */}
-        <header className="sticky top-0 z-30 bg-white border-b border-showroom-border px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-subtle">
+        <header className="sticky top-0 z-30 bg-white border-b border-showroom-border px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-subtle flex-wrap gap-2">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -60,7 +104,39 @@ export const AdminLayout: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2 flex-wrap">
+            {/* Hidden file input for import */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImportFile}
+              accept=".json"
+              className="hidden"
+            />
+
+            {/* Export Snapshot Button */}
+            <button
+              type="button"
+              onClick={handleExportData}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-[#FAF8F5] border border-showroom-border hover:bg-showroom-sand/40 text-showroom-charcoal text-[11px] font-bold uppercase tracking-wider transition-colors"
+              title="Download full CMS dataset snapshot JSON"
+            >
+              <Download className="w-3.5 h-3.5 text-showroom-bronze" />
+              <span>Export</span>
+            </button>
+
+            {/* Import Snapshot Button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-[#FAF8F5] border border-showroom-border hover:bg-showroom-sand/40 text-showroom-charcoal text-[11px] font-bold uppercase tracking-wider transition-colors"
+              title="Upload & merge CMS dataset snapshot JSON"
+            >
+              <Upload className="w-3.5 h-3.5 text-showroom-bronze" />
+              <span>Import</span>
+            </button>
+
+            {/* Sync Cloud Button */}
             <button
               type="button"
               onClick={handleCloudSync}
