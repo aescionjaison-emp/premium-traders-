@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #FAF9F5;
+    color: #171615;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-editorial {
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom Architectural Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF9F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D7CFBE;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9E6B38;
+}
+
+/* Horizontal Scroll Container Utility without standard ugly bars */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle image zoom transition */
+.image-pan {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .image-pan {
+  transform: scale(1.04);
+}
+
+/* Glass & Texture Overlay */
+.glass-panel {
+  background: rgba(250, 249, 245, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 5px;
+}
+
+.glass-dark {
+  background: rgba(23, 22, 21, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 5px;
+}
+
+/* Universal 5px box curve aesthetic */
+.rounded-5px,
+.card-box,
+input,
+select,
+textarea {
+  border-radius: 5px;
+}
