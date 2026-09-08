@@ -9,6 +9,11 @@
     "dev:server": "npm --prefix server run dev",
     "dev:client": "npm --prefix client run dev",
     "build:client": "npm --prefix client run build",
-    "build:server": "npm --prefix server run build"
+    "build:server": "npm --prefix server run build",
+    "login": "npx firebase login",
+    "deploy:hosting": "npm run build:client && npx firebase deploy --only hosting"
+  },
+  "devDependencies": {
+    "firebase-tools": "^13.31.0"
   }
 }
