@@ -71,6 +71,7 @@ export const AdminBrandsPage: React.FC = () => {
       category,
       logo: logo[0] || '',
       displayOrder: Number(displayOrder) || 0,
+      visible: true,
     };
 
     try {

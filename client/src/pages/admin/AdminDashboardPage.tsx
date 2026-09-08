@@ -173,7 +173,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-11 h-11 bg-showroom-ivory shrink-0 overflow-hidden border border-showroom-border">
                     <img
-                      src={p.images[0] || 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=200&q=85'}
+                      src={p.images?.[0] || 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=200&q=85'}
                       alt=""
                       className="w-full h-full object-cover"
                     />

@@ -224,7 +224,7 @@ export const AdminProductsPage: React.FC = () => {
                     <td className="p-3 w-16">
                       <div className="w-12 h-12 bg-showroom-ivory border border-showroom-border overflow-hidden">
                         <img
-                          src={p.images[0] || 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=200&q=85'}
+                          src={p.images?.[0] || 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=200&q=85'}
                           alt=""
                           className="w-full h-full object-cover"
                         />

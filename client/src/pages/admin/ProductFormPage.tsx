@@ -91,37 +91,44 @@ export const ProductFormPage: React.FC = () => {
         if (isEditMode && id) {
           setIsLoading(true);
           const prodRes = await api.getProducts({ admin: 'true' });
-          if (prodRes.data.success) {
-            const current = prodRes.data.data.find((p) => p._id === id);
-            if (current) {
-              setName(current.name);
-              setShortName(current.shortName || current.displayName || '');
-              setVideoUrl(current.videoUrl || '');
-              setPrice(current.price !== undefined ? current.price : '');
-              setSlug(current.slug);
-              setCategory(typeof current.category === 'object' ? current.category._id : current.category);
-              setSubcategory(current.subcategory || '');
-              setBrand(current.brand || 'Architectural Heritage');
-              setCollectionName(current.collectionName || '');
-              setMaterial(current.material);
-              setFinish(current.finish);
-              setSurface(current.surface || 'Floor & Wall');
-              setColor(current.color);
-              setSize(current.size);
-              setBodyType(current.bodyType || '');
-              setSku(current.sku);
-              setDescription(current.description || '');
-              setApplicationsInput(current.applications ? current.applications.join(', ') : '');
-              setSpecifications(current.specifications || []);
-              setImages(current.images || []);
-              setInstallationImages(current.installationImages || []);
-              setFeatured(current.featured);
-              setNewArrival(current.newArrival);
-              setPopular(current.popular);
-              setAvailable(current.available);
-              setVisible(current.visible);
-              setDisplayOrder(current.displayOrder || 0);
+          let current: any = null;
+          if (prodRes.data.success && prodRes.data.data) {
+            current = prodRes.data.data.find((p) => p._id === id || p.slug === id);
+          }
+          if (!current) {
+            const single = await api.getProductBySlug(id);
+            if (single.data.success && single.data.data) {
+              current = single.data.data;
             }
+          }
+          if (current) {
+            setName(current.name);
+            setShortName(current.shortName || current.displayName || '');
+            setVideoUrl(current.videoUrl || '');
+            setPrice(current.price !== undefined ? current.price : '');
+            setSlug(current.slug);
+            setCategory(typeof current.category === 'object' ? current.category._id : current.category);
+            setSubcategory(current.subcategory || '');
+            setBrand(current.brand || 'Architectural Heritage');
+            setCollectionName(current.collectionName || '');
+            setMaterial(current.material);
+            setFinish(current.finish);
+            setSurface(current.surface || 'Floor & Wall');
+            setColor(current.color);
+            setSize(current.size);
+            setBodyType(current.bodyType || '');
+            setSku(current.sku);
+            setDescription(current.description || '');
+            setApplicationsInput(current.applications ? current.applications.join(', ') : '');
+            setSpecifications(current.specifications || []);
+            setImages(current.images || []);
+            setInstallationImages(current.installationImages || []);
+            setFeatured(current.featured);
+            setNewArrival(current.newArrival);
+            setPopular(current.popular);
+            setAvailable(current.available);
+            setVisible(current.visible);
+            setDisplayOrder(current.displayOrder || 0);
           }
         }
       } catch (err) {
