@@ -15,6 +15,7 @@ import {
   DEFAULT_CATEGORIES,
   DEFAULT_COLLECTIONS,
   DEFAULT_BRANDS,
+  DEFAULT_HOMEPAGE_CONFIG,
 } from '../data/showroomCatalogData.js';
 
 // Keys
@@ -251,16 +252,27 @@ export const localStore = {
   },
 
   // --- Homepage Config ---
-  getHomepageConfig: (): IHomepageConfig | null => {
+  getHomepageConfig: (): IHomepageConfig => {
     const saved = localStorage.getItem(K_HOMEPAGE);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          return {
+            ...DEFAULT_HOMEPAGE_CONFIG,
+            ...parsed,
+            heroSlides: (parsed.heroSlides && parsed.heroSlides.length > 0) ? parsed.heroSlides : DEFAULT_HOMEPAGE_CONFIG.heroSlides,
+            materialsComeToLife: (parsed.materialsComeToLife && parsed.materialsComeToLife.length > 0) ? parsed.materialsComeToLife : DEFAULT_HOMEPAGE_CONFIG.materialsComeToLife,
+            categoryChapters: parsed.categoryChapters || DEFAULT_HOMEPAGE_CONFIG.categoryChapters,
+            exploreMaterials: (parsed.exploreMaterials && parsed.exploreMaterials.length > 0) ? parsed.exploreMaterials : DEFAULT_HOMEPAGE_CONFIG.exploreMaterials,
+            sections: (parsed.sections && parsed.sections.length > 0) ? parsed.sections : DEFAULT_HOMEPAGE_CONFIG.sections,
+          } as IHomepageConfig;
+        }
       } catch {
-        return null;
+        return DEFAULT_HOMEPAGE_CONFIG as IHomepageConfig;
       }
     }
-    return null;
+    return DEFAULT_HOMEPAGE_CONFIG as IHomepageConfig;
   },
 
   saveHomepageConfig: (cfg: Partial<IHomepageConfig>): IHomepageConfig => {

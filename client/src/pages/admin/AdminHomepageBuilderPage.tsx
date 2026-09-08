@@ -26,60 +26,16 @@ import {
 } from '../../types/index.js';
 import { useToast } from '../../context/ToastContext.js';
 import { MediaUploader } from '../../components/admin/MediaUploader.js';
+import { DEFAULT_HOMEPAGE_CONFIG } from '../../data/showroomCatalogData.js';
 
 export const AdminHomepageBuilderPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'hero' | 'materials_life' | 'chapters' | 'explore' | 'flow'>('hero');
-  const [config, setConfig] = useState<IHomepageConfig | null>(null);
-  const [sections, setSections] = useState<IHomepageSection[]>([]);
-  const [heroSlides, setHeroSlides] = useState<IHeroSlide[]>([]);
-  const [materialsLife, setMaterialsLife] = useState<IMaterialsLifeSlide[]>([]);
-  const [categoryChapters, setCategoryChapters] = useState<ICategoryChapters>({
-    granite: {
-      id: 'granite',
-      num: '01',
-      name: 'Granite Collection',
-      tagline: 'Natural Stone',
-      desc: '',
-      coverImage: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85',
-      textureImage: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85',
-      spaceImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
-      finishes: ['Polished', 'Honed', 'Leathered'],
-    },
-    tiles: {
-      id: 'tiles',
-      num: '02',
-      name: 'Tile Collection',
-      tagline: 'Modern Surfaces',
-      desc: '',
-      coverImage: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85',
-      textureImage: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85',
-      spaceImage: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=1200&q=85',
-      finishes: ['Glossy', 'Satin Matt', 'Carving'],
-    },
-    wood: {
-      id: 'wood',
-      num: '03',
-      name: 'Wood Collection',
-      tagline: 'Crafted Wood',
-      desc: '',
-      coverImage: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85',
-      textureImage: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85',
-      spaceImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85',
-      finishes: ['Natural Teak', 'Smoked Oak', 'Veneer'],
-    },
-    electrical: {
-      id: 'electrical',
-      num: '04',
-      name: 'Electrical Collection',
-      tagline: 'Smart Essentials',
-      desc: '',
-      coverImage: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85',
-      textureImage: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85',
-      spaceImage: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1200&q=85',
-      finishes: ['Brushed Brass', 'Matte Black', 'Touch Glass'],
-    },
-  });
-  const [exploreMaterials, setExploreMaterials] = useState<IExploreMaterialItem[]>([]);
+  const [config, setConfig] = useState<IHomepageConfig>(DEFAULT_HOMEPAGE_CONFIG as any);
+  const [sections, setSections] = useState<IHomepageSection[]>(DEFAULT_HOMEPAGE_CONFIG.sections);
+  const [heroSlides, setHeroSlides] = useState<IHeroSlide[]>(DEFAULT_HOMEPAGE_CONFIG.heroSlides);
+  const [materialsLife, setMaterialsLife] = useState<IMaterialsLifeSlide[]>(DEFAULT_HOMEPAGE_CONFIG.materialsComeToLife);
+  const [categoryChapters, setCategoryChapters] = useState<ICategoryChapters>(DEFAULT_HOMEPAGE_CONFIG.categoryChapters as any);
+  const [exploreMaterials, setExploreMaterials] = useState<IExploreMaterialItem[]>(DEFAULT_HOMEPAGE_CONFIG.exploreMaterials);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const { success, error } = useToast();
@@ -88,192 +44,67 @@ export const AdminHomepageBuilderPage: React.FC = () => {
     setIsLoading(true);
     try {
       const res = await api.getHomepageConfig();
-      if (res.data.success && res.data.data) {
-        const d = res.data.data;
-        setConfig(d);
-        if (d.sections && d.sections.length > 0) {
-          setSections([...d.sections].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
-        } else {
-          setSections([
-            { id: 'hero', type: 'hero', title: '01 / Hero Section', visible: true, displayOrder: 1 },
-            { id: 'materials_life', type: 'materials_life', title: '02 / Materials Come to Life (Pinned Transformation)', visible: true, displayOrder: 2 },
-            { id: 'chapter_granite', type: 'chapter_granite', title: '03 / Granite Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 3 },
-            { id: 'chapter_tiles', type: 'chapter_tiles', title: '04 / Tile Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 4 },
-            { id: 'chapter_wood', type: 'chapter_wood', title: '05 / Wood Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 5 },
-            { id: 'chapter_electrical', type: 'chapter_electrical', title: '06 / Electrical Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 6 },
-            { id: 'explore_materials', type: 'explore_materials', title: '07 / Explore Materials (Horizontal Glide)', visible: true, displayOrder: 7 },
-            { id: 'brand_marquee', type: 'brand_marquee', title: '08 / Brand Partners Marquee Strip', visible: true, displayOrder: 8 },
-            { id: 'contact_strip', type: 'contact_strip', title: '09 / Showroom Visit & Direct Contact Strip', visible: true, displayOrder: 9 },
-          ]);
-        }
-        const initialHero = (d.heroSlides && d.heroSlides.length > 0) ? d.heroSlides[0] : {
-          smallLabel: 'Premium Materials',
-          heading: 'Beautiful Spaces.',
-          subheading: '',
-          image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=2400&q=85',
-          videoUrl: '/videos/hero.mp4',
-          ctaText: 'Explore Collection',
-          ctaLink: '/catalog',
-          badge: '',
-        };
-        setHeroSlides([initialHero]);
+      const d = (res.data?.success && res.data?.data) ? res.data.data : DEFAULT_HOMEPAGE_CONFIG;
+      setConfig(d as any);
 
-        if (d.materialsComeToLife && d.materialsComeToLife.length > 0) {
-          const normalized = d.materialsComeToLife.map((s: any, i: number) => ({
-            num: s.num || `0${i + 1}`,
-            category: s.category || 'MATERIAL',
-            name: s.name || s.headline || 'Natural Stone',
-            desc: s.desc || s.tagline || '',
-            image: s.image || s.imageTexture || s.textureImage || '',
-            textureImage: s.textureImage || s.imageTexture || s.image || '',
-            highlight: s.highlight || s.imageSpace || '',
-            accent: s.accent || '#D4AF37',
-          }));
-          setMaterialsLife(normalized);
-        } else {
-          setMaterialsLife([
-            {
-              num: '01',
-              category: 'GRANITE',
-              name: 'Natural Stone',
-              desc: 'Raw Slabs → Finished Spaces',
-              image: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1400&q=85',
-              textureImage: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1400&q=85',
-              highlight: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85',
-              accent: '#D4AF37',
-            },
-            {
-              num: '02',
-              category: 'TILES',
-              name: 'Modern Surfaces',
-              desc: 'Continuous Vein Porcelain',
-              image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1400&q=85',
-              textureImage: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1400&q=85',
-              highlight: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=1400&q=85',
-              accent: '#C5A059',
-            },
-            {
-              num: '03',
-              category: 'WOOD WORK',
-              name: 'Crafted Wood',
-              desc: 'Solid Teak & Architectural Joinery',
-              image: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1400&q=85',
-              textureImage: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1400&q=85',
-              highlight: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1400&q=85',
-              accent: '#8C6239',
-            },
-            {
-              num: '04',
-              category: 'ELECTRICAL',
-              name: 'Smart Essentials',
-              desc: 'Solid Brass & Magnetic Tracks',
-              image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1400&q=85',
-              textureImage: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1400&q=85',
-              highlight: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1400&q=85',
-              accent: '#D4AF37',
-            },
-          ]);
-        }
-
-        if (d.categoryChapters) {
-          const normChapters: any = {};
-          (['granite', 'tiles', 'wood', 'electrical'] as const).forEach((k) => {
-            const ch = (d.categoryChapters as any)[k] || {};
-            normChapters[k] = {
-              id: ch.id || k,
-              num: ch.num || ch.number || '01',
-              name: ch.name || ch.heading || 'Collection',
-              tagline: ch.tagline || ch.subLabel || '',
-              desc: ch.desc || '',
-              coverImage: ch.coverImage || ch.image || '',
-              textureImage: ch.textureImage || ch.image || '',
-              spaceImage: ch.spaceImage || '',
-              finishes: ch.finishes || [],
-            };
-          });
-          setCategoryChapters(normChapters);
-        }
-
-        if (d.exploreMaterials && d.exploreMaterials.length > 0) {
-          setExploreMaterials(d.exploreMaterials);
-        } else {
-          setExploreMaterials([
-            {
-              id: '01',
-              category: 'Granite',
-              name: 'Black Galaxy',
-              subtitle: 'Natural Stone',
-              link: '/granite',
-              image: 'https://images.unsplash.com/photo-1567360425618-1594206637d2?auto=format&fit=crop&w=1200&q=85',
-            },
-            {
-              id: '02',
-              category: 'Tiles',
-              name: 'Statuario White',
-              subtitle: 'Modern Surfaces',
-              link: '/tiles',
-              image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=85',
-            },
-            {
-              id: '03',
-              category: 'Wood',
-              name: 'Smoked Oak',
-              subtitle: 'Crafted Wood',
-              link: '/wood',
-              image: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=85',
-            },
-            {
-              id: '04',
-              category: 'Doors',
-              name: 'Teak Entrance',
-              subtitle: 'Architectural Doors',
-              link: '/wood',
-              image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85',
-            },
-            {
-              id: '05',
-              category: 'Surfaces',
-              name: 'Marine Ply',
-              subtitle: 'Engineered Panels',
-              link: '/wood',
-              image: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=85',
-            },
-            {
-              id: '06',
-              category: 'Electrical',
-              name: 'Brass Switch',
-              subtitle: 'Smart Essentials',
-              link: '/electrical',
-              image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=85',
-            },
-          ]);
-        }
+      if (d.sections && d.sections.length > 0) {
+        setSections([...d.sections].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
       } else {
-        // Fallback default sections
-        setSections([
-          { id: 'hero', type: 'hero', title: '01 / Hero Section', visible: true, displayOrder: 1 },
-          { id: 'materials_life', type: 'materials_life', title: '02 / Materials Come to Life (Pinned Transformation)', visible: true, displayOrder: 2 },
-          { id: 'chapter_granite', type: 'chapter_granite', title: '03 / Granite Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 3 },
-          { id: 'chapter_tiles', type: 'chapter_tiles', title: '04 / Tile Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 4 },
-          { id: 'chapter_wood', type: 'chapter_wood', title: '05 / Wood Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 5 },
-          { id: 'chapter_electrical', type: 'chapter_electrical', title: '06 / Electrical Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 6 },
-          { id: 'explore_materials', type: 'explore_materials', title: '07 / Explore Materials (Horizontal Glide)', visible: true, displayOrder: 7 },
-          { id: 'brand_marquee', type: 'brand_marquee', title: '08 / Brand Partners Marquee Strip', visible: true, displayOrder: 8 },
-          { id: 'contact_strip', type: 'contact_strip', title: '09 / Showroom Visit & Direct Contact Strip', visible: true, displayOrder: 9 },
-        ]);
+        setSections(DEFAULT_HOMEPAGE_CONFIG.sections);
+      }
+
+      setHeroSlides((d.heroSlides && d.heroSlides.length > 0) ? d.heroSlides : DEFAULT_HOMEPAGE_CONFIG.heroSlides);
+
+      if (d.materialsComeToLife && d.materialsComeToLife.length > 0) {
+        const normalized = d.materialsComeToLife.map((s: any, i: number) => ({
+          num: s.num || `0${i + 1}`,
+          category: s.category || 'MATERIAL',
+          name: s.name || s.headline || 'Natural Stone',
+          desc: s.desc || s.tagline || '',
+          image: s.image || s.imageTexture || s.textureImage || '',
+          textureImage: s.textureImage || s.imageTexture || s.image || '',
+          highlight: s.highlight || s.imageSpace || '',
+          accent: s.accent || '#D4AF37',
+        }));
+        setMaterialsLife(normalized);
+      } else {
+        setMaterialsLife(DEFAULT_HOMEPAGE_CONFIG.materialsComeToLife);
+      }
+
+      if (d.categoryChapters) {
+        const normChapters: any = {};
+        (['granite', 'tiles', 'wood', 'electrical'] as const).forEach((k) => {
+          const ch = (d.categoryChapters as any)[k] || (DEFAULT_HOMEPAGE_CONFIG.categoryChapters as any)[k] || {};
+          normChapters[k] = {
+            id: ch.id || k,
+            num: ch.num || ch.number || '01',
+            name: ch.name || ch.heading || 'Collection',
+            tagline: ch.tagline || ch.subLabel || '',
+            desc: ch.desc || '',
+            coverImage: ch.coverImage || ch.image || '',
+            textureImage: ch.textureImage || ch.image || '',
+            spaceImage: ch.spaceImage || '',
+            finishes: ch.finishes || [],
+          };
+        });
+        setCategoryChapters(normChapters);
+      } else {
+        setCategoryChapters(DEFAULT_HOMEPAGE_CONFIG.categoryChapters as any);
+      }
+
+      if (d.exploreMaterials && d.exploreMaterials.length > 0) {
+        setExploreMaterials(d.exploreMaterials);
+      } else {
+        setExploreMaterials(DEFAULT_HOMEPAGE_CONFIG.exploreMaterials);
       }
     } catch (err) {
-      setSections([
-        { id: 'hero', type: 'hero', title: '01 / Hero Section', visible: true, displayOrder: 1 },
-        { id: 'materials_life', type: 'materials_life', title: '02 / Materials Come to Life (Pinned Transformation)', visible: true, displayOrder: 2 },
-        { id: 'chapter_granite', type: 'chapter_granite', title: '03 / Granite Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 3 },
-        { id: 'chapter_tiles', type: 'chapter_tiles', title: '04 / Tile Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 4 },
-        { id: 'chapter_wood', type: 'chapter_wood', title: '05 / Wood Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 5 },
-        { id: 'chapter_electrical', type: 'chapter_electrical', title: '06 / Electrical Collection (Visual Chapter & Live Products)', visible: true, displayOrder: 6 },
-        { id: 'explore_materials', type: 'explore_materials', title: '07 / Explore Materials (Horizontal Glide)', visible: true, displayOrder: 7 },
-        { id: 'brand_marquee', type: 'brand_marquee', title: '08 / Brand Partners Marquee Strip', visible: true, displayOrder: 8 },
-        { id: 'contact_strip', type: 'contact_strip', title: '09 / Showroom Visit & Direct Contact Strip', visible: true, displayOrder: 9 },
-      ]);
+      console.warn('Failed to load homepage config, fallback to default:', err);
+      setConfig(DEFAULT_HOMEPAGE_CONFIG as any);
+      setSections(DEFAULT_HOMEPAGE_CONFIG.sections);
+      setHeroSlides(DEFAULT_HOMEPAGE_CONFIG.heroSlides);
+      setMaterialsLife(DEFAULT_HOMEPAGE_CONFIG.materialsComeToLife);
+      setCategoryChapters(DEFAULT_HOMEPAGE_CONFIG.categoryChapters as any);
+      setExploreMaterials(DEFAULT_HOMEPAGE_CONFIG.exploreMaterials);
     } finally {
       setIsLoading(false);
     }
