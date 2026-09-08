@@ -235,8 +235,10 @@ export interface IEnquiry {
 }
 
 export interface IUser {
-  id: string;
+  id?: string;
+  _id?: string;
   name: string;
   email: string;
-  role: 'admin' | 'editor';
+  role: 'admin' | 'editor' | string;
+  avatar?: string;
 }

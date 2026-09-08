@@ -42,12 +42,12 @@ export const AdminDashboardPage: React.FC = () => {
         ]);
 
         const prodsList = (prodsRes.data?.data && prodsRes.data.data.length > 0) ? prodsRes.data.data : MASTER_SHOWROOM_PRODUCTS;
-        const totalProds = prodsRes.data?.pagination?.total || prodsList.length;
+        const totalProds = (prodsRes.data as any)?.pagination?.total || prodsList.length;
         const featuredCount = prodsList.filter((p) => p.featured).length;
         const totalCats = catsRes.data?.data?.length || 4;
         const totalCols = colsRes.data?.data?.length || 4;
         const enqList = enqRes.data?.data || [];
-        const totalEnq = enqRes.data?.pagination?.total || enqList.length;
+        const totalEnq = (enqRes.data as any)?.pagination?.total || enqList.length;
         const newEnqCount = enqList.filter((e) => e.status === 'NEW').length;
 
         setStats({

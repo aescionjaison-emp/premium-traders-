@@ -35,10 +35,11 @@ export const AdminLoginPage: React.FC = () => {
       // Standalone CMS mode fallback
       if (email.trim().toLowerCase() === 'admin@showroom.com' && password.trim() === 'Admin@12345') {
         const demoUser = {
+          id: 'admin-standalone-01',
           _id: 'admin-standalone-01',
           name: 'Super Admin',
           email: 'admin@showroom.com',
-          role: 'admin',
+          role: 'admin' as const,
           avatar: '',
         };
         login('standalone_admin_token_2026', demoUser);
